@@ -1,0 +1,30 @@
+body {
+    background-color: lightgray;
+}
+
+ul {
+    display: flex;
+    flex-direction: column;
+}
+
+.navBar {
+    display: grid;
+    width: 100%;
+}
+
+.navItem {
+    width: 100px;
+    height: fit-content;
+}
+
+.navBar a {
+    display: flex;
+    justify-content: center;
+    border-left: 2px solid black;
+    border-right: 2px solid black;
+    background: lightblue;
+    transition: background 0.3s;
+    &:hover {
+        background: blue;
+    }
+}
