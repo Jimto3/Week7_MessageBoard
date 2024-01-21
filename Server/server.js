@@ -110,3 +110,11 @@ app.post("/addmessage", async (req, res) => {
         [username, message, category, 0]
     );
 });
+
+app.post("/getliked", async (req, res) => {
+    const { id } = req.body;
+    const data = await db.query("SELECT message_id FROM liked WHERE id = $1", [
+        id,
+    ]);
+    res.json(data.rows);
+});

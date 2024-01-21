@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function LikeButton({ handleLike, id }) {
+export default function LikeButton({ handleLike, id, user_id }) {
     const [saturation, setSaturation] = useState(0);
     // if user has liked this image, change saturation
+    useEffect(() => {
+        checkLiked();
+    }, []);
     return (
         <img
             onMouseEnter={checkSaturation}
@@ -19,9 +22,23 @@ export default function LikeButton({ handleLike, id }) {
     }
     async function handleClick() {
         checkSaturation();
-
-        // setClicked(true);
-        //if saturation = 0, like -= 1, else like += 1
         handleLike(saturation, id);
+    }
+
+    async function checkLiked() {
+        const data = fetch(
+            "https://messageboard-server.onrender.com/getliked",
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id: user_id }),
+            }
+        );
+        const likedMessages = await data.json();
+        likedMessages.map((message) => {
+            if (id == message.message_id) {
+                checkSaturation();
+            }
+        });
     }
 }
