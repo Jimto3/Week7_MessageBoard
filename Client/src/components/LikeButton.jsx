@@ -12,7 +12,11 @@ export default function LikeButton({ handleLike, id, user_id }) {
             onMouseLeave={checkSaturation}
             onClick={handleClick}
             src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/blue-like-button-icon.png"
-            style={{ filter: `saturate(${saturation})`, width: `20px` }}
+            style={{
+                filter: `saturate(${saturation})`,
+                width: `20px`,
+                height: "fit-content",
+            }}
         />
     );
     function checkSaturation() {
@@ -26,7 +30,7 @@ export default function LikeButton({ handleLike, id, user_id }) {
     }
 
     async function checkLiked() {
-        const data = fetch(
+        const data = await fetch(
             "https://messageboard-server.onrender.com/getliked",
             {
                 method: "POST",

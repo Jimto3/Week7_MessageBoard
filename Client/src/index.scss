@@ -42,12 +42,39 @@ ul {
 }
 
 .messageBox {
+    display: flex;
     width: 60vw;
     border: 3px solid black;
-    border-radius: 50px;
     margin-top: 5px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background: whitesmoke;
 }
 
 .addMessage {
     display: flex;
+}
+
+.likeBox {
+    display: flex;
+    position: absolute;
+    width: fit-content;
+    justify-content: center;
+    align-items: center;
+    right: 10px;
+}
+
+.likes {
+    margin: 0;
+    margin-right: 5px;
+}
+
+.messageHead {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    position: relative;
+    width: 100%;
+    background: lightblue;
 }

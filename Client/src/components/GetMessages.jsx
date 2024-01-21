@@ -41,21 +41,26 @@ export default function GetMessages({ user_id }) {
             {filter.map((post) => {
                 return (
                     <div key={post.id + post.name} className="messageBox">
-                        <h2 className="name">{post.name}</h2>
+                        <div className="messageHead">
+                            <h2 className="name" style={{ margin: "0" }}>
+                                {post.name}
+                            </h2>
+                            <div className="likeBox">
+                                <h2 className="likes">{post.likes}</h2>
+                                <>
+                                    {user_id != 0 ? (
+                                        <LikeButton
+                                            handleLike={handleLike}
+                                            id={post.id}
+                                            user_id={user_id}
+                                        />
+                                    ) : (
+                                        <h5>Login to like posts!</h5>
+                                    )}
+                                </>
+                            </div>
+                        </div>
                         <h2 className="message">{post.message}</h2>
-                        <h2 className="likes">{`Likes: ${post.likes}`}</h2>
-                        <h2 className="likes">{post.id}</h2>
-                        <>
-                            {user_id != 0 ? (
-                                <LikeButton
-                                    handleLike={handleLike}
-                                    id={post.id}
-                                    user_id={user_id}
-                                />
-                            ) : (
-                                <h5>Login to like posts!</h5>
-                            )}
-                        </>
                     </div>
                 );
             })}
