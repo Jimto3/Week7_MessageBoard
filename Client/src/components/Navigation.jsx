@@ -15,6 +15,18 @@ export default function Navigation() {
             url: "https://static.thenounproject.com/png/1453176-200.png",
             active: false,
         },
+        {
+            id: 2,
+            link: "/addPost",
+            url: "https://www.pngall.com/wp-content/uploads/10/Plus-Symbol-Vector-PNG-Picture.png",
+            active: false,
+        },
+        {
+            id: 3,
+            link: "/loginPage",
+            url: "https://www.iconpacks.net/icons/1/free-key-icon-920-thumb.png",
+            active: false,
+        },
     ]);
     return (
         <div
@@ -24,10 +36,10 @@ export default function Navigation() {
             {nav.map((item) => {
                 return (
                     <Link
-                        onClick={handleNav(item.id)}
+                        onClick={() => handleNav(item.id)}
                         to={item.link}
                         key={item.id}
-                        style={item.active ? { background: `red` } : {}}
+                        style={item.active ? { background: `purple` } : {}}
                     >
                         <img className="navItem" src={item.url} />
                     </Link>
@@ -35,13 +47,12 @@ export default function Navigation() {
             })}
         </div>
     );
-    function handleNav(event, id) {
-        // event.preventDefault();
-        // nav.forEach((item) => {
-        //     item.active = false;
-        //     console.log(item, item.active);
-        // });
-        console.log(id);
-        // nav[event.target.value.key] = true;
+    function handleNav(id) {
+        const newActive = nav.map((item) => {
+            if (item.id != id) {
+                return { ...item, active: false };
+            } else return { ...item, active: true };
+        });
+        setNav(newActive);
     }
 }

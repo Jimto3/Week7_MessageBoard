@@ -51,17 +51,62 @@ app.post("/filter", async (req, res) => {
 });
 
 app.post("/likes", async (req, res) => {
-    const { like, id } = req.body;
+    const { like, id, user_id } = req.body;
     if (like == 1) {
-        const data = db.query(
-            "UPDATE posts SET likes = likes + 1 WHERE id = $1",
-            [id]
-        );
+        db.query("UPDATE posts SET likes = likes + 1 WHERE id = $1", [id]);
+        db.query("INSERT INTO liked (id, message_id) VALUES ($1, $2)", [
+            user_id,
+            id,
+        ]);
     } else {
-        const data = db.query(
-            "UPDATE posts SET likes = likes - 1 WHERE id = $1",
-            [id]
-        );
+        db.query("UPDATE posts SET likes = likes - 1 WHERE id = $1", [id]);
+        db.query("DELETE FROM liked WHERE id=$1 AND message_id=$2", [
+            user_id,
+            id,
+        ]);
     }
     res.json(`Likes changed`);
+});
+
+app.post("/users", async (req, res) => {
+    const { username, password } = req.body;
+    const data = await db.query(
+        "SELECT users.id FROM users WHERE username = ($1) AND password = ($2)",
+        [username, password]
+    );
+    res.json(data.rows);
+});
+
+app.post("/add", async (req, res) => {
+    const { username, password } = req.body;
+    const usernameCheck = await db.query(
+        "SELECT users.username FROM users WHERE username = ($1)",
+        [username]
+    );
+    if (usernameCheck.rows.length) {
+        res.json(false);
+    } else {
+        await db.query(
+            "INSERT INTO users(username, password) VALUES ($1, $2)",
+            [username, password]
+        );
+        const id = await db.query(
+            "SELECT users.id FROM users WHERE username = ($1) AND password = ($2)",
+            [username, password]
+        );
+        res.json(id.rows);
+    }
+});
+
+app.post("/addmessage", async (req, res) => {
+    const { message, category, id } = req.body;
+    const data = await db.query(
+        "SELECT users.username FROM users WHERE users.id = $1",
+        [id]
+    );
+    const username = data.rows[0].username;
+    db.query(
+        "INSERT INTO posts(name, message, category_id, likes) VALUES ($1, $2, $3, $4)",
+        [username, message, category, 0]
+    );
 });

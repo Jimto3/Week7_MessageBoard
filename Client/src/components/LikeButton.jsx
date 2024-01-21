@@ -9,7 +9,7 @@ export default function LikeButton({ handleLike, id }) {
             onMouseLeave={checkSaturation}
             onClick={handleClick}
             src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/blue-like-button-icon.png"
-            style={{ filter: `saturate(${saturation})`, width: `100px` }}
+            style={{ filter: `saturate(${saturation})`, width: `20px` }}
         />
     );
     function checkSaturation() {

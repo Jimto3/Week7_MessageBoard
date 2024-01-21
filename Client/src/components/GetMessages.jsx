@@ -2,16 +2,22 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import LikeButton from "./LikeButton.jsx";
 
-export default function GetMessages() {
+export default function GetMessages({ user_id }) {
     const [filter, setFilter] = useState([]);
     const [categories, setCategories] = useState([]);
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams({ category: 0 });
     useEffect(() => {
         getData("");
         getCategories();
     }, []);
     return (
-        <div>
+        <div
+            style={{
+                display: `flex`,
+                alignItems: `center`,
+                flexDirection: `column`,
+            }}
+        >
             <form>
                 <label>Category: </label>
                 <select
@@ -32,7 +38,6 @@ export default function GetMessages() {
                     })}
                 </select>
             </form>
-
             {filter.map((post) => {
                 return (
                     <div key={post.id + post.name} className="messageBox">
@@ -40,7 +45,17 @@ export default function GetMessages() {
                         <h2 className="message">{post.message}</h2>
                         <h2 className="likes">{`Likes: ${post.likes}`}</h2>
                         <h2 className="likes">{post.id}</h2>
-                        <LikeButton handleLike={handleLike} id={post.id} />
+                        <>
+                            {user_id != 0 ? (
+                                <LikeButton
+                                    handleLike={handleLike}
+                                    id={post.id}
+                                    user_id={user_id}
+                                />
+                            ) : (
+                                <h5>Login to like posts!</h5>
+                            )}
+                        </>
                     </div>
                 );
             })}
@@ -48,13 +63,15 @@ export default function GetMessages() {
     );
 
     async function getData() {
-        const data = await fetch(`http://localhost:8080/`);
+        const data = await fetch(`https://messageboard-server.onrender.com/`);
         const json = await data.json();
         setFilter(json.sort((a, b) => a.id - b.id));
     }
 
     async function getCategories() {
-        const data = await fetch("http://localhost:8080/categories");
+        const data = await fetch(
+            "https://messageboard-server.onrender.com/categories"
+        );
         const json = await data.json();
         setCategories(json);
     }
@@ -66,13 +83,16 @@ export default function GetMessages() {
 
     async function filterData(category) {
         if (category != 0) {
-            const data = await fetch("http://localhost:8080/filter", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ category: category }),
-            });
+            const data = await fetch(
+                "https://messageboard-server.onrender.com/filter",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ category: category }),
+                }
+            );
             const json = await data.json();
             setFilter(json.sort((a, b) => a.id - b.id));
         } else {
@@ -83,13 +103,11 @@ export default function GetMessages() {
 
     async function handleLike(value, id) {
         //if value = 1, +1 like, else -1 like
-        const sendLike = await fetch("http://localhost:8080/likes", {
+        await fetch("https://messageboard-server.onrender.com/likes", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ like: value, id: id }),
+            body: JSON.stringify({ like: value, id: id, user_id: user_id }),
         });
-        const json = await sendLike.json();
-        // console.log(json);
         filterData(searchParams.get("category"));
     }
 }

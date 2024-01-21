@@ -36,3 +36,8 @@ values
 ('Emma Reynolds','Your input matters! Share your thoughts on how we can improve and make this community even better.','4','0'),
 ('Lucas Turner','Need some advice on a coding challenge. Any coding ninjas here who can help me out?','9','0'),
 ('Aiden Brown','Friendly reminder to review and follow our community guidelines. Lets make this space awesome for everyone!','10','0')
+
+CREATE TABLE IF NOT EXISTS liked (
+  id INTEGER NOT NULL,
+  message_id INTEGER REFERENCES posts(id)
+)

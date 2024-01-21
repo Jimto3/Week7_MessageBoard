@@ -1,5 +1,6 @@
 body {
-    background-color: lightgray;
+    background-color: darkviolet;
+    margin: 0;
 }
 
 ul {
@@ -10,21 +11,43 @@ ul {
 .navBar {
     display: grid;
     width: 100%;
+    border-bottom: 5px solid white;
+    border-top: 1px solid white;
 }
 
 .navItem {
-    width: 100px;
-    height: fit-content;
+    max-width: 100px;
+    max-height: 100px;
+    filter: invert(100%);
 }
 
 .navBar a {
     display: flex;
     justify-content: center;
-    border-left: 2px solid black;
-    border-right: 2px solid black;
-    background: lightblue;
+    border-left: 2px solid white;
+    border-right: 2px solid white;
+    background: black;
     transition: background 0.3s;
     &:hover {
-        background: blue;
+        background: rgb(200, 0, 200);
     }
+}
+.loginText {
+    width: fit-content;
+    text-decoration: underline;
+    color: purple;
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.messageBox {
+    width: 60vw;
+    border: 3px solid black;
+    border-radius: 50px;
+    margin-top: 5px;
+}
+
+.addMessage {
+    display: flex;
 }
